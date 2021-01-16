@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Stable bootstrap version -->
+    <link rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+    crossorigin="anonymous">
+    <!-- Stable font-awesome version -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous">
+</head>
+<style>
+    /* The header of the site with description */
+    .jumbotron {
+        /* No space between header and navigation bar */
+        margin: 0;
+        /* For when it's squished together */
+        padding-left: 15px;
+    }
+    p > i {
+        padding: 0px 4px 0px 4px;
+    }
+    .navbar {
+        padding: 15px 30px;
+    }
+    /* Class for brand icon that appears at the left of navigation */
+    .icon-header {
+        /* Leave free space left and right */
+        padding: 0px 4px;
+        font-size: 24px;
+    }
+    /* Class for icons that appear underneath */
+    .icon-content {
+        /* Smaller than icons in navigation */
+        font-size: 16px;
+    }
+    /* Navigation items that cannot be reached */
+    .nav-link.disabled {
+        text-decoration: line-through;
+        color: grey;
+    }
+    /* Anchor tags or links are not underlined by default
+     * this is so links can be used with icons */
+    a:hover {
+        text-decoration: none;
+    }
+    .nav-item > a {
+        color: black;
+        white-space: nowrap;
+    }
+    /* If they are used with text a link class should apply.
+     * you don't have to understand this
+     * it's just fancy animations */
+    .link {
+        /* Gradient which will be seen once the size resets */
+        background:
+            linear-gradient(
+                to bottom, dodgerblue 0%,
+                dodgerblue 100%
+            );
+        background-position: 0 100%;
+        background-repeat: repeat-x;
+        /* Line underneath the text */
+        background-size: 2px 2px;
+        color: #000;
+        text-decoration: none;
+        transition: all 250ms;
+        cursor: pointer;
+        color: #0077ee;
+    }
+    .link:hover {
+        /* Reset size to fill area with gradient */
+        background-size: 2px 50px;
+        color: white;
+    }
+    /* Hover on navigation links that are not opened currently
+     * and are not disabled either */
+    .nav-item:not(.active) > .nav-link:not(.disabled):hover,
+    .nav-item:not(.active) > .nav-link:not(.disabled):focus {
+        /* Signalise that they can be selected */
+        color: dodgerblue !important;
+    }
+    /* Currently selected */
+    .nav-item.active > .nav-link {
+            text-shadow: 0px 0px 10px rgba( 0, 0, 0, 0.4 );
+            color: rgb( 80, 80, 80 );
+            /* It cannot be clicked */
+            pointer-events: none;
+    }
+    /* Container for input fields with icons */
+    .input-container {
+        display: flex;
+        /* Take width of the parent */
+        width: 100%;
+    }
+    /* Extra navigation items that consists of an icon */
+    .icon-wrapper {
+        /* Same width for icons below 45px */
+        min-width: 45px;
+        /* Aligns the icon because it counts as text */
+        text-align: center;
+        font-size: 18px;
+    }
+    .inner-icon {
+        color: black;
+    }
+	/* Apply style on multiple actions */
+	.icon-wrapper:hover, .icon-wrapper:focus,
+    .inner-icon:hover {
+        /* No outline for this navigation item
+         * because it is not a text */
+        outline: none !important;
+        /* Signalise the link can be clicked */
+        cursor: pointer;
+        text-shadow: 0px 0px 14px rgba( 0, 123, 255, 0.8 );
+        transition: all 250ms;
+        transition-timing-function: ease-in-out;
+    }
+    /* Icons next to input fields */
+    .input-icon {
+        padding: 8px;
+        background: rgb( 219, 233, 244 );
+        color: grey;
+        /* Same width for all icons under width 45px */
+        min-width: 45px;
+        text-align: center;
+        border: 1px solid lightgrey;
+        font-size: 16px;
+        /* Remove sharp corners */
+        border-radius: 4px;
+        /* Radius only where it does not connect
+        * to the input field next to it */
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        outline: none;
+        /* Does not change on any selector */
+        background: whitesmoke !important;
+        /* Becomes blue when on focus */
+        border: 1px solid lightgrey;
+        border-radius: 4px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        color: black !important;
+        /* Remove double border since icon is right next to it
+        * assumes that icons are always placed right */
+        border-right: 0;
+    }
+    /* Style on input field when hovered */
+    .input-container:hover .input-field {
+        box-shadow: 0px 0px 10px 2px rgba( 30, 144, 255, 0.3 );
+        transition: all 250ms;
+        transition-timing-function: ease-in-out;
+    }
+    /* Style on icon when hovered
+     * border style also affects input field */
+    .input-field:focus,
+    .input-field:focus + .input-icon,
+    .input-container:hover .input-icon {
+        box-shadow: 0px 0px 10px 2px rgba( 30, 144, 255, 0.3 );
+        color: rgba( 0, 0, 0, 0.8 );
+        background: rgb( 180, 209, 232 );
+        border: 1px solid rgb( 180, 209, 232 );
+        transition: all 250ms;
+        transition-timing-function: ease-in-out;
+    }
+    /* Keep the border from reappearing */
+    .input-field:focus {
+        border-right: 0;
+    }
+    /* Indent for the website content */
+    .card-border {
+        padding: 30px 20px;
+    }
+    /* Uniformly spacer between items */
+    .width-spacer {
+        display: inline-block;
+        width: 8px;
+    }
+    .width-spacer2 {
+        display: inline-block;
+        width: 2px;
+    }
+    .height-spacer {
+        height: 15px;
+    }
+    /* For content to be displayed on the right */
+    .float-wrapper {
+        display: flex;
+        float: right;
+    }
+    /* Please ignore this part
+     * it is just for a bounce effect */
+    .bounce-right {
+        display: inline-block;
+        vertical-align: middle;
+        transform: perspective( 1px ) translateZ( 0 );
+        box-shadow: 0 0 1px rgba( 0, 0, 0, 0 );
+        position: relative;
+        transition-property: color, border-color;
+        transition-duration: 0.5s;
+        border-radius: 4px;
+    }
+    .bounce-right:before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var( --color );
+        transform: scaleX( 0 );
+        transform-origin: 0 50%;
+        transition-property: transform;
+        transition-duration: 0.5s;
+        transition-timing-function: ease-out;
+        border-radius: 4px;
+    }
+    .bounce-right:hover,
+    .bounce-right:focus,
+    .bounce-right:active {
+        border-color: transparent;
+        color: white;
+    }
+    .bounce-right:hover:before,
+    .bounce-right:focus:before,
+    .bounce-right:active:before {
+        transform: scaleX( 1 );
+        transition-timing-function: cubic-bezier( 0.52, 1.64, 0.37, 0.66 );
+    }
+    /* Styles for the buttons on the page */
+    .btn-custom-danger {
+        background-color: transparent;
+        color: #dc3545;
+        border-color: rgba( 220, 53, 69, 0.4 );
+    }
+    .btn-custom-success {
+        background-color: transparent;
+        color: #28a745;
+        border-color: rgba( 40, 167, 69, 0.4);
+    }
+    .btn-custom-black {
+        background-color: transparent;
+        color: black;
+        border-color: lightgrey;
+    }
+</style>
+<body>
+    <!-- Website Title at the top -->
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1>Student Boards</h1>
+            <p>Manage Your <b>Courses</b><i class="fas fa-chalkboard-teacher"></i>From The Comfort Of Your <b>Home</b><i class="fas fa-home"></i><br>With Ease. <b>Online</b><i class="fas fa-broadcast-tower"></i><b><a href="about:blank" class="link">Join Now</a></b><i class="fas fa-exclamation"></i></p>
+        </div>
+    </div>
+    <!-- Navigation bar with same color as jumbotron -->
+    <nav class="navbar navbar-expand-lg" style="background-color: rgb(233, 236, 239)">
+        <!-- Short title underneath "stbrd" meaning Student Board -->
+        <span class="navbar-brand">
+            <i class="fas fa-university icon-header" style="color:black;"></i>
+            <span class="font-weight-bold">STBRD</span>
+        </span>
+        <div class="navbar-collapse">
+            <!-- Standard navigation text parts to click such as "Student Overview", "Schedules",... -->
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="about:blank">Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about:blank">Schedules</a>
+                </li>
+                <!-- Need to be signed in for "My Account" to be active -->
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="about:blank">My Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about:blank">About Us</a>
+                </li>
+            </ul>
+
+            <!-- Login form inside Navigation bar -->
+            <form class="form-inline my-2 my-lg-0" action="#">
+                <div class="input-group">
+                    <!-- Username field -->
+                    <div class="input-container">
+                        <input class="form-control input-field" type="text" placeholder="@Username" name="Username">
+                        <i class="fas fa-signature input-icon"></i>
+                    </div>
+                </div>
+                <span class="width-spacer"></span>
+                <div class="input-group">
+                    <!-- Password field -->
+                    <div class="input-container">
+                        <input class="form-control input-field" type="password" placeholder="*********" name="Password">
+                        <i class="fa fa-key input-icon"></i>
+                    </div>
+                    <span class="width-spacer"></span>
+                </div>
+                <!-- Login button to send the form -->
+                <div>
+                    <button class="btn btn-custom-black my-2 my-sm-0 bounce-right" type="submit" onclick="this.blur();" style="--color: black;">
+                        <span>Log In</span>
+                        <div class="width-spacer2"></div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <span class="width-spacer"></span>
+                    <!-- Navigation image parts such as "Create Account" and "Forgot Password" -->
+                    <a class="icon-wrapper" href="about:blank" title="Create Account">
+                        <i class="fas fa-user-plus inner-icon"></i>
+                    </a>
+                    <span class="width-spacer"></span>
+                    <a class="icon-wrapper" href="about:blank" title="Forgot Password?">
+                        <i class="fas fa-question inner-icon"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </nav>
+    <!-- Add empty space and align the card -->
+    <div class="card-border">
+        <div class="card">
+            <!-- Header of the card -->
+            <div class="card-header">
+                <i class="fas fa-edit icon-content"></i>
+                <span>STUDENT INFORMATION</span>
+            </div>
+            <div class="card-body">
+                <!-- Student information to be entered -->
+                <form action="#">
+                    <!-- First row -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <span>E-Mail (optional)</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="text" placeholder="example@example.com" name="EMail">
+                                <i class="fas fa-envelope input-icon" style="background: whitesmoke;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div> <!-- fill empty space -->
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="height-spacer"></div>
+                    <!-- Second row -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <span>First Name</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="text" placeholder="John" name="FName">
+                                <i class="fas fa-user-tag input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Last Name</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="text" placeholder="Doe" name="LName">
+                                <i class="fas fa-user-tag input-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="height-spacer"></div>
+                    <!-- Third row -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <span>Course</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="text" placeholder="Computer Science" name="Course">
+                                <i class="fa fa-school input-icon"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Year Of Entry (optional)</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="number" placeholder="2020" name="Year">
+                                <i class="fas fa-calendar-alt input-icon" style="background: whitesmoke;"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <span>Section</span>
+                            <div class="input-container">
+                                <input class="form-control input-field" type="number" placeholder="101" name="Section">
+                                <i class="fas fa-sort-numeric-down input-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="height-spacer"></div>
+                    <!-- Buttons to send or delete at the bottom right -->
+                    <div class="float-wrapper">
+                        <!-- Send button -->
+                        <button class="btn btn-custom-success my-2 my-sm-0 bounce-right" type="submit" onclick="this.blur();" style="--color: #28a745;">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <div class="width-spacer2"></div>
+                            <span>Send</span>
+                        </button>
+                        <span class="width-spacer"></span>
+                        <!-- Delete button -->
+                        <button class="btn btn-custom-danger my-2 my-sm-0 bounce-right" type="reset" onclick="this.blur();" style="--color: #dc3545;">
+                            <i class="fas fa-minus-circle"></i>
+                            <div class="width-spacer2"></div>
+                            <span>Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div> <!-- card-body -->
+        </div> <!-- card -->
+    </div> <!-- card-border -->
+</body>
+</html>
